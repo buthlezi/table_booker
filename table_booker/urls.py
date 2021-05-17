@@ -10,6 +10,6 @@ urlpatterns = [
     # for a naked request, go into views and find a function called home_page - referenced as 'home'
     path('login', views.login_page, name='login'),
     path('logout', views.logout_page, name='logout'),
-    path('signup', views.login_page, name='signup'),
+    path('signup', views.signup_page, name='signup'),
 
 ]
