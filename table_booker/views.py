@@ -1,9 +1,10 @@
+import table_booker
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import redirect, render
 
-from .forms import UserForm
+from .forms import BookingForm, UserForm
 from .models import Restaurant
 # from current directory import models
 
@@ -15,6 +16,38 @@ def home_page(request):
     context = {'restaurants': Restaurant.objects.all()}    
     return render(request, 'home.html', context=context)
 
+def book_restaurant(request, restaurant_id):
+    if not request.user.is_authenticated:
+        return redirect('table_booker:login')
+    
+    # breakpoint()
+    # NameError at /book-restaurant/2
+    # name 'breakpoint' is not defined
+
+    try:
+        restaurant = Restaurant.objects.get(id=restaurant_id)
+    except Restaurant.DoesNotExist:
+        restaurant = None
+
+    if restaurant is None:
+        messages.error(request, 'Restaurant does not exist')
+        return redirect('table_booker:home')
+
+    if request.method == 'POST':
+        form = BookingForm(request.POST)
+
+        if form.is_valid():
+            booking = form.save(commit=False)
+            booking.restaurant = restaurant
+            booking.user = request.user
+            booking.save()
+            messages.info(request, f'{restaurant} has been booked successfully')
+            return redirect('table_booker:home')
+    else:
+        form = BookingForm
+
+    return render(request=request, template_name='book_restaurant.html', context={'booking_form': form})
+    
 
 def login_page(request):
     if request.method == "POST":
