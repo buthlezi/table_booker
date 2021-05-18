@@ -1,6 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
+from django.utils import timezone
 
 from .models import Booking
 
@@ -31,5 +33,11 @@ class BookingForm(forms.ModelForm):
     class Meta:
         model = Booking
         fields = ('table', 'date',)
+  
+    def clean(self):
+        cleaned_data = super().clean()
+        date = cleaned_data['date']
 
-    
+        if date < timezone.now():
+           # breakpoint()
+           raise ValidationError('You cannot enter a past date')
