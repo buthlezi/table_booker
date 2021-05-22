@@ -30,14 +30,26 @@ class UserForm(UserCreationForm):
         return user
 
 class BookingForm(forms.ModelForm):
+# add date widget
+# https://docs.djangoproject.com/en/3.2/ref/forms/widgets/
+
+    date = forms.DateTimeField(
+        input_formats=["%Y-%m-%dT%H:%M"],
+        widget=forms.DateTimeInput(
+            attrs={"type": "datetime-local", "class": "form-control"},
+            format="%Y-%m-%dT%H:%M",
+        ),
+    )
+    
     class Meta:
         model = Booking
         fields = ('table', 'date',)
   
     def clean(self):
         cleaned_data = super().clean()
-        date = cleaned_data['date']
-
-        if date < timezone.now():
+        date = cleaned_data.get['date']
+        
+        if date:
+           if date < timezone.now():
            # breakpoint()
-           raise ValidationError('You cannot enter a past date')
+             raise ValidationError('You cannot enter a past date')
