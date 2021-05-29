@@ -82,7 +82,7 @@ DATABASES = {
         "PASSWORD": "r4$AMGexn9a#4mJd",
         "HOST": "localhost",
         "PORT": "5432",
-    }
+           }
 }
 
 
