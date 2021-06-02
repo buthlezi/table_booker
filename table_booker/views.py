@@ -1,25 +1,28 @@
-import table_booker
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import redirect, render
 
+import table_booker
+
 from .forms import BookingForm, UserForm
 from .models import Restaurant
+
 # from current directory import models
 
 
 def home_page(request):
     if not request.user.is_authenticated:
-        return redirect('table_booker:login')
-# otherwise skip to line 11        
-    context = {'restaurants': Restaurant.objects.all()}    
-    return render(request, 'home.html', context=context)
+        return redirect("table_booker:login")
+    # otherwise skip to line 11
+    context = {"restaurants": Restaurant.objects.all()}
+    return render(request, "home.html", context=context)
+
 
 def book_restaurant(request, restaurant_id):
     if not request.user.is_authenticated:
-        return redirect('table_booker:login')
-    
+        return redirect("table_booker:login")
+
     # breakpoint()
     # NameError at /book-restaurant/2
     # name 'breakpoint' is not defined
@@ -30,10 +33,10 @@ def book_restaurant(request, restaurant_id):
         restaurant = None
 
     if restaurant is None:
-        messages.error(request, 'Restaurant does not exist')
-        return redirect('table_booker:home')
+        messages.error(request, "Restaurant does not exist")
+        return redirect("table_booker:home")
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form = BookingForm(request.POST)
 
         if form.is_valid():
@@ -41,13 +44,17 @@ def book_restaurant(request, restaurant_id):
             booking.restaurant = restaurant
             booking.user = request.user
             booking.save()
-            messages.info(request, f'{restaurant} has been booked successfully')
-            return redirect('table_booker:home')
+            messages.info(request, f"{restaurant} has been booked successfully")
+            return redirect("table_booker:home")
     else:
         form = BookingForm
 
-    return render(request=request, template_name='book_restaurant.html', context={'booking_form': form})
-    
+    return render(
+        request=request,
+        template_name="book_restaurant.html",
+        context={"booking_form": form},
+    )
+
 
 def login_page(request):
     if request.method == "POST":
@@ -68,11 +75,9 @@ def login_page(request):
     form = AuthenticationForm()
     # GET contains no data - empty form
     return render(
-        request=request,
-        template_name="login.html",
-        context={"login_form": form},
+        request=request, template_name="login.html", context={"login_form": form},
     )
- 
+
 
 def signup_page(request):
     if request.method == "POST":
@@ -85,16 +90,15 @@ def signup_page(request):
         messages.error(request, "Unsuccessful registration. Invalid information.")
     form = UserForm
     return render(
-        request=request,
-        template_name="signup.html",
-        context={"register_form": form},
+        request=request, template_name="signup.html", context={"register_form": form},
     )
-
 
 
 def logout_page(request):
     logout(request)
-    messages.info(request, 'You have successfully logged out.')
-    return redirect('table_booker:login') 
+    messages.info(request, "You have successfully logged out.")
+    return redirect("table_booker:login")
 
-# no need for a logout template           
+
+# no need for a logout template
+
