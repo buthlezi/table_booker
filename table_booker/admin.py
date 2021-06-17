@@ -2,6 +2,7 @@ from django.contrib import admin
 
 from .models import Booking, BusinessHour, Restaurant, Setting, Table
 
+
 class BusinessHourInline(admin.TabularInline):
     model = BusinessHour
     extra = 7
@@ -13,10 +14,12 @@ class TableInline(admin.TabularInline):
     extra = 1
     show_change_link = True
 
+
 class SettingInline(admin.TabularInline):
     model = Setting
     extra = 1
     show_change_link = True
+
 
 @admin.register(Restaurant)
 class RestaurantAdmin(admin.ModelAdmin):
@@ -29,8 +32,8 @@ class RestaurantAdmin(admin.ModelAdmin):
         "modified_at",
     )
     inlines = (
-        BusinessHourInline, 
-        TableInline, 
+        BusinessHourInline,
+        TableInline,
         SettingInline,
     )
 
@@ -45,8 +48,4 @@ class BookingAdmin(admin.ModelAdmin):
         "created_at",
         "modified_at",
     )
-
-
-
-
 

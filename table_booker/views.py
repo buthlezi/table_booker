@@ -37,17 +37,17 @@ def book_restaurant(request, restaurant_id):
         return redirect("table_booker:home")
 
     if request.method == "POST":
-        form = BookingForm(request.POST)
+        form = BookingForm(restaurant, request.POST)
 
         if form.is_valid():
             booking = form.save(commit=False)
             booking.restaurant = restaurant
             booking.user = request.user
             booking.save()
-            messages.info(request, f"{restaurant} has been booked successfully")
+            messages.info(request, f"You successfully booked {restaurant}")
             return redirect("table_booker:home")
     else:
-        form = BookingForm
+        form = BookingForm(restaurant)
 
     return render(
         request=request,

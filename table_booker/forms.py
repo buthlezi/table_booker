@@ -4,7 +4,8 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 
-from .models import Booking
+from .models import Booking, Table
+
 
 class UserForm(UserCreationForm):
     first_name = forms.CharField(required=True)
@@ -29,9 +30,10 @@ class UserForm(UserCreationForm):
             user.save()
         return user
 
+
 class BookingForm(forms.ModelForm):
-# add date widget
-# https://docs.djangoproject.com/en/3.2/ref/forms/widgets/
+    # add date widget
+    # https://docs.djangoproject.com/en/3.2/ref/forms/widgets/
 
     date = forms.DateTimeField(
         input_formats=["%Y-%m-%dT%H:%M"],
@@ -40,16 +42,25 @@ class BookingForm(forms.ModelForm):
             format="%Y-%m-%dT%H:%M",
         ),
     )
-    
+
+    def __init__(self, restaurant, *args, **kwargs):
+        super(BookingForm, self).__init__(*args, **kwargs)
+        self.fields["table"].queryset = Table.objects.filter(
+            restaurant_id=restaurant.id
+        )
+
     class Meta:
         model = Booking
-        fields = ('table', 'date',)
-  
+        fields = (
+            "table",
+            "date",
+        )
+
     def clean(self):
         cleaned_data = super().clean()
-        date = cleaned_data.get['date']
-        
+        date = cleaned_data.get("date")
+
         if date:
-           if date < timezone.now():
-           # breakpoint()
-             raise ValidationError('You cannot enter a past date')
+            if date < timezone.now():
+                # breakpoint()
+                raise ValidationError("You cannot enter a past date")
