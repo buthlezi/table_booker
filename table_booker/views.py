@@ -6,7 +6,7 @@ from django.shortcuts import redirect, render
 import table_booker
 
 from .forms import BookingForm, UserForm
-from .models import Restaurant
+from .models import Booking, Restaurant
 
 # from current directory import models
 
@@ -14,7 +14,7 @@ from .models import Restaurant
 def home_page(request):
     if not request.user.is_authenticated:
         return redirect("table_booker:login")
-    # otherwise skip to line 11
+    # otherwise skip to line 17
     context = {"restaurants": Restaurant.objects.all()}
     return render(request, "home.html", context=context)
 
@@ -54,6 +54,14 @@ def book_restaurant(request, restaurant_id):
         template_name="book_restaurant.html",
         context={"booking_form": form},
     )
+
+
+def my_bookings(request):
+    if not request.user.is_authenticated:
+        return redirect("table_booker:login")
+
+    context = {"bookings": Booking.objects.filter(user=request.user)}
+    return render(request, "my_bookings.html", context=context)
 
 
 def login_page(request):
