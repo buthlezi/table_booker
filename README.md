@@ -1,4 +1,4 @@
-h1 table_booker - an app for booking tables in restaurants
+table_booker - an app for booking tables in restaurants
 
 
 
