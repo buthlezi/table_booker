@@ -39,7 +39,7 @@ BONUS STEPS
     Type 'from django.db import models' at the top
 
     Type 'def --str--(self): 
-    'return self.title' at the bottom
+    'return self.name' at the bottom
 
     Type 'python manage.py makemigrations' in VSCODE terminal
 
