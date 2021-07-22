@@ -35,13 +35,17 @@ table_booker - an app for booking tables in restaurants
 
 BONUS STEPS
 
-    Open models.py in 'table_booker/table_booker' folder 
+    A. Open models.py in 'table_booker/table_booker' folder 
     Type 'from django.db import models' at the top
 
-    Type 'def --str--(self): 
+    B. Type 'def --str--(self): 
     'return self.name' at the bottom
 
-    Type 'python manage.py makemigrations' in VSCODE terminal
+    C. Type 'python manage.py makemigrations' in VSCODE terminal
 
-    Type 'python manage.py migrate' in VSCODE terminal
+    D. Type 'python manage.py migrate' in VSCODE terminal
+    
+    E. Type 'python manage.py runserver' in VSCODE terminal to launch the development server
+    
+    F. Crtl + Click on server address: e.g. http://127.0.0.1:8000/ to launch the table_booker app.
 
